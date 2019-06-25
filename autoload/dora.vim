@@ -52,7 +52,7 @@ endfunction
 function! dora#delete_files(files)
     for file in a:files
         if isdirectory(file)
-            let success = delete(file, 'd')
+            let success = delete(file, 'rf')
             if success == -1 
                 echoerr '[dora] Error deleting directory ' . file
             endif

@@ -28,4 +28,5 @@ Note: If you've ever used vidir, it's the same but inside of vim and can create
 files too.
 
 
-## How it works (technical)
+## Running the tests
+
