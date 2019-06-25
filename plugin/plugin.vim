@@ -1,7 +1,7 @@
 " Useful help topics
 " file-functions
 
-nnoremap - :call dora#ls()<cr>
+nnoremap - :call dora#ls('.')<cr>
 
 
 " TODO  

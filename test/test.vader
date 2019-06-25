@@ -1,3 +1,11 @@
 Execute (A basic test):
   AssertEqual 2, 2
   
+Execute (Put our directory in a buffer):
+  call dora#ls('./test/fake-filesystem')
+
+Expect (A buffer with our fake filesystem in it):
+
+  ./test/fake-filesystem/afile.php
+  ./test/fake-filesystem/heres-another.ts
+  ./test/fake-filesystem/maybe

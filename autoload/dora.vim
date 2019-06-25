@@ -1,8 +1,8 @@
-function! dora#ls()
-    let results = globpath('.', '*')
+function! dora#ls(directory)
+    let results = globpath(a:directory, '*')
     " TODO, just call it once and concat the list for
     " dora#put_contents_into_buffer"
-    let g:dora_before = globpath('.', '*', 0, 1)
+    let g:dora_before = globpath(a:directory, '*', 0, 1)
     call dora#put_contents_into_buffer(results)
 endfunction
 
