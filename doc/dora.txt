@@ -1,0 +1,41 @@
+dora.txt dora
+
+dora.vim - A file explorer that behaves like a buffer
+
+===============================================================================
+1. Using Dora                                                        *dora-use*
+
+Dora's file explorer is a vim buffer. Open up dora with - and you're greeted 
+with a buffer with files/directories in it. 
+
+If you've used vidir then you're used to Dora.
+
+Delete directories with dd (or anything else) and :w those changes to
+confirm your deletions
+
+Create new directories by appending lines to the buffer. If a line ends with /
+then we assume you're creating a directory.
+
+                                                          *dora-deleting-files*
+
+                                                    *dora-deleting-directories*
+
+                                                    *dora-creating-directories*
+
+
+===============================================================================
+2. Dora Mappings                                                *dora-mappings*
+
+                                                         *dora-global-mappings*
+
+`-`
+    Open the Dora file explorer
+
+
+
+                                                          *dora-local-mappings*
+`:w`
+    Commit all file modifications you've made to the buffer
+
+`<cr>`
+    Open the file under the cursor

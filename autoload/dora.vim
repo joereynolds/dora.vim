@@ -69,6 +69,11 @@ endfunction
 
 function! dora#create_files(files)
     for file in a:files
+        "If the file ends in '/' we make the assumption it's a directory
+        if file =~? '\/$'
+            call mkdir(file, 'p')
+        endif
+
         execute 'edit ' . file
     endfor
 endfunction
