@@ -90,7 +90,7 @@ endfunction
 
 function! dora#put_contents_into_buffer(contents)
     "TODO - make this number the length of the longest piece of text
-    60 vnew | put =a:contents
+    60 vnew dora | put =a:contents
     set filetype=dora
 endfunction
 
