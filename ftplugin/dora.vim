@@ -1,6 +1,6 @@
-nnoremap q :q!
-nnoremap <cr> :e<cword> <cr>
-nnoremap :w :call dora#write()<cr>
+nnoremap <buffer> q :q!
+nnoremap <buffer> <cr> :e<cWORD> <cr>
+nnoremap <buffer> :w :call dora#write()<cr>
 
 augroup dora
     " TODO
