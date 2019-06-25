@@ -9,3 +9,13 @@ Expect (A buffer with our fake filesystem in it):
   ./test/fake-filesystem/afile.php
   ./test/fake-filesystem/heres-another.ts
   ./test/fake-filesystem/maybe
+
+Execute (Test filepaths are correctly recognised as directories):
+  let expected = 1
+  let actual = dora#is_directory('my/directory/')
+  AssertEqual expected, actual
+
+Execute (Test filepaths are correctly recognised as files):
+  let expected = 0
+  let actual = dora#is_directory('my/directory/aplace/file.php')
+  AssertEqual expected, actual

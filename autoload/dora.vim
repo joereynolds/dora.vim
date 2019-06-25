@@ -29,9 +29,6 @@ function! dora#write()
             call dora#create_files(l:files_to_create)
         endif
     endif
-
-    echo g:dora_before
-    echo l:dora_after
 endfunction
 
 "Treat array_a as before and array_b as after"
@@ -53,29 +50,28 @@ function! dora#delete_files(files)
     for file in a:files
         if isdirectory(file)
             let success = delete(file, 'rf')
-            if success == -1 
-                echoerr '[dora] Error deleting directory ' . file
-            endif
         else 
             let success = delete(file)
-            if success == -1 
-                " TODO find out how to do the template strings thing I've seen
-                " once or twice
-                echoerr '[dora] Error deleting file ' . file
-            endif
+        endif
+        if success == -1 
+            echoerr '[dora] Error deleting ' . file
         endif
     endfor
 endfunction
 
 function! dora#create_files(files)
     for file in a:files
-        "If the file ends in '/' we make the assumption it's a directory
-        if file =~? '\/$'
+        if dora#is_directory(file)
             call mkdir(file, 'p')
         endif
 
         execute 'edit ' . file
     endfor
+endfunction
+
+"If the file ends in '/' we make the assumption it's a directory
+function! dora#is_directory(file)
+    return a:file =~? '\/$'
 endfunction
 
 function! dora#get_files_after_modification()
