@@ -17,18 +17,24 @@ function! dora#write()
     let l:dora_after = dora#get_files_after_modification()
 
     if (len(g:dora_before) !=? len(l:dora_after))
-        "If there are fewer files after modification, we've marked files for deletion
-        if (len(l:dora_after) < len(g:dora_before))
+        if dora#should_mark_files_for_deletion(g:dora_before, l:dora_after)
             let l:files_for_deletion = dora#array_diff(g:dora_before, l:dora_after)
             call dora#delete_files(l:files_for_deletion)
         endif
 
-        "If there are more files after modification, we've marked files for creation
-        if (len(l:dora_after) > len(g:dora_before))
+        if dora#should_mark_files_for_creation(g:dora_before, l:dora_after)
             let l:files_to_create = dora#array_diff(l:dora_after, g:dora_before)
             call dora#create_files(l:files_to_create)
         endif
     endif
+endfunction
+
+function! dora#should_mark_files_for_deletion(before_mods, after_mods)
+    return (len(a:after_mods) < len(a:before_mods))
+endfunction
+
+function! dora#should_mark_files_for_creation(before_mods, after_mods)
+    return (len(a:after_mods) > len(a:before_mods))
 endfunction
 
 "Treat array_a as before and array_b as after"
