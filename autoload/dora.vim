@@ -4,10 +4,8 @@ let s:window_open = 0
 let g:dora_last_dir_opened = '.'
 
 function! dora#ls(directory) abort
-    let results = globpath(a:directory, '*')
-    " TODO, just call it once and concat the list for
-    " dora#put_contents_into_buffer"
-    let g:dora_before = globpath(a:directory, '*', 0, 1)
+    let results = globpath(a:directory, '*', 0, 1)
+    let g:dora_before = results
 
     if isdirectory(a:directory)
         call dora#clear_buffer_contents()
@@ -121,7 +119,13 @@ function! dora#put_contents_into_buffer(contents)
         execute 'silent buffer ' . s:buffer_id
     endif
 
-    put =a:contents
+    for line in a:contents
+        if isdirectory(line)
+            let line = line . '/'
+        endif
+        put =line
+    endfor
+
     set filetype=dora
     normal! gg
 
@@ -141,13 +145,13 @@ function! dora#open_under_cursor()
 endfunction
 
 function! dora#go_back()
-  let l:parent_dir = fnameescape(fnamemodify(g:dora_last_dir_opened, ':h'))
-  let g:dora_last_dir_opened = l:parent_dir
-  call dora#ls(l:parent_dir)
+    let l:parent_dir = fnameescape(fnamemodify(g:dora_last_dir_opened, ':h'))
+    let g:dora_last_dir_opened = l:parent_dir
+    call dora#ls(l:parent_dir)
 endfunction
 
 function! dora#clear_buffer_contents()
-        normal! ggdG
+    normal! ggdG
 endfunction
 
 
@@ -157,8 +161,7 @@ endfunction
 " - Pressing enter on a filename adds a newline to the dora buffer
 "
 " Things to do
-" - Add ../ and ./ entries to the explorer buffer
-" - Colour directories and files differently
+" - Add ../ entry to the explorer buffer
 "
 " Tests to write
 " - It opens up a new buffer for every new file specified

@@ -12,7 +12,7 @@ Expect (A buffer with our fake filesystem in it):
 
   ./test/fake-filesystem/afile.php
   ./test/fake-filesystem/heres-another.ts
-  ./test/fake-filesystem/maybe
+  ./test/fake-filesystem/maybe/
 
 ================================================================================
 Execute (Test filepaths are correctly recognised as directories):
