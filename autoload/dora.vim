@@ -8,6 +8,11 @@ function! dora#ls(directory) abort
     " TODO, just call it once and concat the list for
     " dora#put_contents_into_buffer"
     let g:dora_before = globpath(a:directory, '*', 0, 1)
+
+    if isdirectory(a:directory)
+        call dora#clear_buffer_contents()
+    endif 
+
     call dora#put_contents_into_buffer(results)
 endfunction
 
@@ -109,13 +114,15 @@ function! dora#put_contents_into_buffer(contents)
 
     if !win_gotoid(s:window_id)
         "TODO - make this number the length of the longest piece of text
-        60 vnew dora | put =a:contents
+        60 vnew dora
         let s:window_id = win_getid()
         let s:buffer_id = bufnr('%')
         let s:window_open = 1
         execute 'silent buffer ' . s:buffer_id
-        set filetype=dora
     endif
+
+    put =a:contents
+    set filetype=dora
 
 endfunction
 
@@ -124,14 +131,35 @@ function! dora#open_under_cursor()
 
     if isdirectory(l:path)
         let g:dora_last_dir_opened = l:path
+    else
+        execute 'botright vnew ' . l:path
     endif
 
+    let s:window_open = 0
     call dora#ls(l:path)
+endfunction
+
+function! dora#go_back()
+  let l:parent_dir = fnameescape(fnamemodify(g:dora_last_dir_opened, ':h'))
+  let g:dora_last_dir_opened = l:parent_dir
+  call dora#ls(l:parent_dir)
+endfunction
+
+function! dora#clear_buffer_contents()
+        normal! ggdG
 endfunction
 
 
 " TODO
 "
+" Bugs
+"
+" Things to do
+" - Add ../ and ./ entries to the explorer buffer
+"
 " Tests to write
 " - It opens up a new buffer for every new file specified
 " - The file explorer opens up the last directory we entered
+" - The previous dora buffer is cleared when we enter anew directory
+" - The g:dora_last_dir_opened variable is set when we go back a directory
+" - It opens a file if we press <cr> on it
