@@ -1,5 +1,5 @@
 # Dora (the file explorer)
-Note none of this works yet, this is a pipedream/WIP.
+Note: Most of this doesn't work yet, this is a pipedream/WIP.
 
 ## Why?
 
@@ -30,3 +30,4 @@ files too.
 
 ## Running the tests
 
+Go into the test file and `:Vader`
