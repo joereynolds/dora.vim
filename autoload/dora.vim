@@ -123,6 +123,7 @@ function! dora#put_contents_into_buffer(contents)
 
     put =a:contents
     set filetype=dora
+    normal! gg
 
 endfunction
 
@@ -153,9 +154,11 @@ endfunction
 " TODO
 "
 " Bugs
+" - Pressing enter on a filename adds a newline to the dora buffer
 "
 " Things to do
 " - Add ../ and ./ entries to the explorer buffer
+" - Colour directories and files differently
 "
 " Tests to write
 " - It opens up a new buffer for every new file specified

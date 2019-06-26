@@ -79,3 +79,10 @@ Do:
 Then:
   let expected = '.'
   AssertEqual expected, g:dora_last_dir_opened
+
+================================================================================
+Execute (Test our cursor position is at the top when we create a dora buffer):
+  call dora#ls('./test/fake-filesystem')
+  let expected = 1
+  let actual = line('.')
+  AssertEqual expected, actual
