@@ -1,3 +1,7 @@
+let s:buffer_id = -1
+let s:window_id = -1
+let s:window_open = 0
+
 function! dora#ls(directory)
     let results = globpath(a:directory, '*')
     " TODO, just call it once and concat the list for
@@ -95,11 +99,21 @@ function! dora#get_files_after_modification()
 endfunction
 
 function! dora#put_contents_into_buffer(contents)
-    "TODO - make this number the length of the longest piece of text
-    60 vnew dora | put =a:contents
-    set filetype=dora
-endfunction
 
-function! dora#open_under_cursor()
+    if s:window_open
+        execute 'bdelete!' . s:buffer_id
+        let s:window_open = 0
+        return
+    endif
+
+    if !win_gotoid(s:window_id)
+        "TODO - make this number the length of the longest piece of text
+        60 vnew dora | put =a:contents
+        let s:window_id = win_getid()
+        let s:buffer_id = bufnr('%')
+        let s:window_open = 1
+        execute 'silent buffer ' . s:buffer_id
+        set filetype=dora
+    endif
 
 endfunction
