@@ -1,8 +1,9 @@
 let s:buffer_id = -1
 let s:window_id = -1
 let s:window_open = 0
+let g:dora_last_dir_opened = '.'
 
-function! dora#ls(directory)
+function! dora#ls(directory) abort
     let results = globpath(a:directory, '*')
     " TODO, just call it once and concat the list for
     " dora#put_contents_into_buffer"
@@ -75,7 +76,7 @@ function! dora#create_files(files)
             call mkdir(file, 'p')
         endif
 
-        execute 'edit ' . file
+        execute 'new ' . file 
     endfor
 endfunction
 
@@ -117,3 +118,20 @@ function! dora#put_contents_into_buffer(contents)
     endif
 
 endfunction
+
+function! dora#open_under_cursor()
+    let l:path = expand('<cWORD>')
+
+    if isdirectory(l:path)
+        let g:dora_last_dir_opened = l:path
+    endif
+
+    call dora#ls(l:path)
+endfunction
+
+
+" TODO
+"
+" Tests to write
+" - It opens up a new buffer for every new file specified
+" - The file explorer opens up the last directory we entered

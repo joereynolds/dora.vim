@@ -1,5 +1,5 @@
 nnoremap <buffer> q :q!
-nnoremap <buffer> <cr> :e<cWORD> <cr>
+nnoremap <buffer> <cr> :call dora#open_under_cursor()<cr>
 nnoremap <buffer> :w :call dora#write()<cr>
 
 augroup dora
