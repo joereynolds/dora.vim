@@ -86,3 +86,13 @@ Execute (Test our cursor position is at the top when we create a dora buffer):
   let expected = 1
   let actual = line('.')
   AssertEqual expected, actual
+
+================================================================================
+Given dora (Test a dora buffer has a fixed width):
+  ./some-file
+
+Execute:
+  let expected = 1
+  let actual = &winfixwidth
+
+  AssertEqual expected, actual
