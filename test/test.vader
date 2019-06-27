@@ -96,3 +96,31 @@ Execute:
   let actual = &winfixwidth
 
   AssertEqual expected, actual
+
+================================================================================
+Given dora (Test going into a directory with <cr>):
+  ./non-existent-file
+  ./and-another
+  ./test/fake-filesystem/maybe
+
+Do:
+  G\<cr>
+
+Expect:
+
+  ./test/fake-filesystem/maybe/placeholder
+
+================================================================================
+Given dora (Test going back a directory with < is correct):
+  ./non-existent-file
+  ./and-another
+  ./test/fake-filesystem/maybe
+
+Do:
+  G\<cr><
+
+Expect:
+
+  test/fake-filesystem/afile.php
+  test/fake-filesystem/heres-another.ts
+  test/fake-filesystem/maybe/

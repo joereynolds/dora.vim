@@ -112,7 +112,7 @@ function! dora#put_contents_into_buffer(contents)
 
     if !win_gotoid(s:window_id)
         "TODO - make this number the length of the longest piece of text
-        60 vnew dora
+        topleft 60 vnew dora
         let s:window_id = win_getid()
         let s:buffer_id = bufnr('%')
         let s:window_open = 1
@@ -145,20 +145,22 @@ function! dora#open_under_cursor()
 endfunction
 
 function! dora#go_back()
-    let l:parent_dir = fnameescape(fnamemodify(g:dora_last_dir_opened, ':h'))
+    let l:parent_dir = fnameescape(fnamemodify(g:dora_last_dir_opened, ':.:h'))
     let g:dora_last_dir_opened = l:parent_dir
     call dora#ls(l:parent_dir)
 endfunction
 
 function! dora#clear_buffer_contents()
-    normal! ggdG
+    if &filetype ==? 'dora'
+        normal! ggdG
+    endif
 endfunction
-
 
 " TODO
 "
 " Bugs
-" - Pressing enter on a filename adds a newline to the dora buffer
+" - Once dora#open_under_cursor has been called, you can't close the buffer
+"   with -
 "
 " Things to do
 " - Add ../ entry to the explorer buffer
@@ -169,3 +171,4 @@ endfunction
 " - The previous dora buffer is cleared when we enter anew directory
 " - The g:dora_last_dir_opened variable is set when we go back a directory
 " - It opens a file if we press <cr> on it
+" - Dora buffers open to the far left
