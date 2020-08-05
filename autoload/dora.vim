@@ -104,12 +104,6 @@ endfunction
 
 function! dora#put_contents_into_buffer(contents)
 
-    if s:window_open
-        execute 'bdelete!' . s:buffer_id
-        let s:window_open = 0
-        return
-    endif
-
     if !win_gotoid(s:window_id)
         "TODO - make this number the length of the longest piece of text
         topleft 60 vnew dora
@@ -156,6 +150,22 @@ function! dora#clear_buffer_contents()
     endif
 endfunction
 
+" Filters the files under cwd using `fd`
+function! dora#filter()
+    let filter_criteria = input('Filter:')
+    let results =  systemlist('fd ' . filter_criteria)
+
+    call dora#clear_buffer_contents()
+    call dora#put_contents_into_buffer(results)
+endfunction
+
+function! dora#test()
+    let l:file = expand('<cWORD>')
+    execute '!composer run test-unit -- ' . l:file
+endfunction
+
+
+
 " TODO
 "
 " Bugs
@@ -164,11 +174,11 @@ endfunction
 "
 " Things to do
 " - Add ../ entry to the explorer buffer
+" - Add the top level directory name so we know where we are
 "
 " Tests to write
 " - It opens up a new buffer for every new file specified
 " - The file explorer opens up the last directory we entered
 " - The previous dora buffer is cleared when we enter anew directory
-" - The g:dora_last_dir_opened variable is set when we go back a directory
 " - It opens a file if we press <cr> on it
 " - Dora buffers open to the far left
