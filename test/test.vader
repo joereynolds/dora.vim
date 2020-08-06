@@ -27,34 +27,6 @@ Execute (Test filepaths are correctly recognised as files):
   AssertEqual expected, actual
 
 ================================================================================
-Execute (Test files are correctly marked for deletion):
-  let before_mods = [1, 2, 3, 4, 5]
-  let after_mods = [1, 2, 3, 4]
-  let actual = dora#should_mark_files_for_deletion(before_mods, after_mods)
-  AssertEqual actual, 1
-
-================================================================================
-Execute (Test files are correctly marked for deletion):
-  let before_mods = [1, 2]
-  let after_mods = [1, 2, 3, 4]
-  let actual = dora#should_mark_files_for_deletion(before_mods, after_mods)
-  AssertEqual actual, 0
-
-================================================================================
-Execute (Test files are correctly marked for creation):
-  let before_mods = [1, 2]
-  let after_mods = [1, 2, 3, 4]
-  let actual = dora#should_mark_files_for_creation(before_mods, after_mods)
-  AssertEqual actual, 1
-
-================================================================================
-Execute (Test files are correctly marked for creation):
-  let before_mods = [1, 2, 3, 4, 5]
-  let after_mods = [1, 2, 3, 4]
-  let actual = dora#should_mark_files_for_creation(before_mods, after_mods)
-  AssertEqual actual, 0
-
-================================================================================
 Given dora (Test the g:dora_last_dir_opened variable is set when we open a directory):
   ./non-existent-file
   ./and-another

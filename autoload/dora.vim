@@ -3,6 +3,15 @@ let s:window_id = -1
 let s:window_open = 0
 let g:dora_last_dir_opened = '.'
 
+" Brings back a dictionary which represents our filesystem
+" as a tree
+function dora#get_files() abort
+
+
+endfunction
+
+let g:tree = dora#get_files()
+
 function! dora#ls(directory) abort
     let results = globpath(a:directory, '*', 0, 1)
     let g:dora_before = results
@@ -14,63 +23,24 @@ function! dora#ls(directory) abort
     call dora#put_contents_into_buffer(results)
 endfunction
 
-"We get a diff of the filesystem at the current directory.
-"We get the state of what it was before our operations and then what we wish
-"to change it to. We make the following assumptions:
-"
-"1) If the array after modification is smaller then there has been a deletion
-"2) If the array after modification is larger then there has been an addition
-"3) If an item in the array is no longer the same, then it's been renamed
-function! dora#write()
-    let l:dora_after = dora#get_files_after_modification()
-
-    if (len(g:dora_before) !=? len(l:dora_after))
-        if dora#should_mark_files_for_deletion(g:dora_before, l:dora_after)
-            let l:files_for_deletion = dora#array_diff(g:dora_before, l:dora_after)
-            call dora#delete_files(l:files_for_deletion)
-        endif
-
-        if dora#should_mark_files_for_creation(g:dora_before, l:dora_after)
-            let l:files_to_create = dora#array_diff(l:dora_after, g:dora_before)
-            call dora#create_files(l:files_to_create)
-        endif
-    endif
-endfunction
-
-function! dora#should_mark_files_for_deletion(before_mods, after_mods)
-    return (len(a:after_mods) < len(a:before_mods))
-endfunction
-
-function! dora#should_mark_files_for_creation(before_mods, after_mods)
-    return (len(a:after_mods) > len(a:before_mods))
-endfunction
-
-"Treat array_a as before and array_b as after"
-"TODO make this more robust, currently the order of the arguments
-"passed in matters. It should just take two arrays and diff them, duh.
-function! dora#array_diff(array_a, array_b)
-    let l:diff = []
-    for item in a:array_a
-        if (index(a:array_b, item) < 0)
-            call insert(l:diff, item)
-        endif
-    endfor
-
-    return l:diff
-endfunction
-
 " files is an array of filepaths
 function! dora#delete_files(files)
-    for file in a:files
-        if isdirectory(file)
-            let success = delete(file, 'rf')
-        else 
-            let success = delete(file)
-        endif
-        if success == -1 
-            echoerr '[dora] Error deleting ' . file
-        endif
-    endfor
+    let choice = confirm("Confirm deletion of files:" . string(a:files), "&Yes\n&No")
+
+    if choice == 1
+        for file in a:files
+            if isdirectory(file)
+                let success = delete(file, 'rf')
+            else 
+                let success = delete(file)
+            endif
+            if success == -1 
+                echoerr '[dora] Error deleting ' . file
+            endif
+        endfor
+    endif
+
+    call dora#ls(g:dora_last_dir_opened)
 endfunction
 
 function! dora#create_files(files)
@@ -88,25 +58,11 @@ function! dora#is_directory(file)
     return a:file =~? '\/$'
 endfunction
 
-function! dora#get_files_after_modification()
-    let l:files = getline(1, '$')
-    let l:cleaned_files = []
-
-    for line in l:files
-        if line !=# ''
-            call insert(l:cleaned_files, line)
-        endif
-    endfor
-
-    " TODO - For some reason the items are now reversed in the list, why?
-    return reverse(l:cleaned_files)
-endfunction
-
 function! dora#put_contents_into_buffer(contents)
 
     if !win_gotoid(s:window_id)
         "TODO - make this number the length of the longest piece of text
-        topleft 60 vnew dora
+        topleft 40 vnew dora
         let s:window_id = win_getid()
         let s:buffer_id = bufnr('%')
         let s:window_open = 1
@@ -153,7 +109,7 @@ endfunction
 " Filters the files under cwd using `fd`
 function! dora#filter()
     let filter_criteria = input('Filter:')
-    let results =  systemlist('fd ' . filter_criteria)
+    let results =  systemlist('fd '. filter_criteria)
 
     call dora#clear_buffer_contents()
     call dora#put_contents_into_buffer(results)
