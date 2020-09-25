@@ -1,4 +1,4 @@
-nnoremap <buffer> q :q!
+nnoremap <buffer> q :q!<cr>
 nnoremap <buffer> <cr> :call dora#open_under_cursor()<cr>
 nnoremap <buffer> < :call dora#go_back()<cr>
 nnoremap <buffer> f :call dora#filter()<cr>

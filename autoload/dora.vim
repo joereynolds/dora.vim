@@ -25,7 +25,7 @@ endfunction
 
 " files is an array of filepaths
 function! dora#delete_files(files)
-    let choice = confirm("Confirm deletion of files:" . string(a:files), "&Yes\n&No")
+    let choice = confirm("Delete:" . string(a:files), "&Yes\n&No")
 
     if choice == 1
         for file in a:files
