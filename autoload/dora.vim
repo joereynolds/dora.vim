@@ -70,6 +70,7 @@ function! dora#put_contents_into_buffer(contents)
     endif
 
     for line in a:contents
+        let line = substitute(line, "^\./", "", "")
         if isdirectory(line)
             let line = line . '/'
         endif
@@ -121,8 +122,8 @@ function! dora#test()
 endfunction
 
 
-
-" TODO
+" TODO  
+" - Add abort to functions
 "
 " Bugs
 " - Once dora#open_under_cursor has been called, you can't close the buffer
@@ -138,3 +139,4 @@ endfunction
 " - The previous dora buffer is cleared when we enter anew directory
 " - It opens a file if we press <cr> on it
 " - Dora buffers open to the far left
+" - Files do not have './' prefixed to them
