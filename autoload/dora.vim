@@ -74,6 +74,7 @@ function! dora#put_contents_into_buffer(contents)
         if isdirectory(line)
             let line = line . '/'
         endif
+        let line = "  " . line "Bit of padding
         put =line
     endfor
 
