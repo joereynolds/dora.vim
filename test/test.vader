@@ -10,9 +10,9 @@ Execute (Put our directory in a buffer):
 
 Expect (A buffer with our fake filesystem in it):
 
-  ./test/fake-filesystem/afile.php
-  ./test/fake-filesystem/heres-another.ts
-  ./test/fake-filesystem/maybe/
+  test/fake-filesystem/afile.php
+  test/fake-filesystem/heres-another.ts
+  test/fake-filesystem/maybe/
 
 ================================================================================
 Execute (Test filepaths are correctly recognised as directories):
@@ -36,7 +36,7 @@ Do:
   G\<cr>
 
 Then:
-  let expected = './test/fake-filesystem/maybe'
+  let expected = 'test/fake-filesystem/maybe'
   AssertEqual expected, g:dora_last_dir_opened
 
 ================================================================================
@@ -80,7 +80,7 @@ Do:
 
 Expect:
 
-  ./test/fake-filesystem/maybe/placeholder
+  test/fake-filesystem/maybe/placeholder
 
 ================================================================================
 Given dora (Test going back a directory with < is correct):
