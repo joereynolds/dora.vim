@@ -23,34 +23,47 @@ function! dora#ls(directory) abort
     call dora#put_contents_into_buffer(results)
 endfunction
 
-" files is an array of filepaths
-function! dora#delete_files(files)
-    let choice = confirm("Delete:" . string(a:files), "&Yes\n&No")
-
-    if choice == 1
-        for file in a:files
-            if isdirectory(file)
-                let success = delete(file, 'rf')
-            else 
-                let success = delete(file)
-            endif
-            if success == -1 
-                echoerr '[dora] Error deleting ' . file
-            endif
-        endfor
-    endif
+function! dora#file_operation(operation, files)
+    for file in a:files
+        silent execute 'call dora#' . a:operation . '_files("' . file . '")'
+    endfor
 
     call dora#ls(g:dora_last_dir_opened)
 endfunction
 
-function! dora#create_files(files)
-    for file in a:files
-        if dora#is_directory(file)
-            call mkdir(file, 'p')
-        endif
+" files is an array of filepaths
+function! dora#delete_files(file)
+    let choice = confirm("Delete:" . string(a:file), "&Yes\n&No")
 
-        execute 'new ' . file 
-    endfor
+    if choice == 1
+        if isdirectory(a:file)
+            let success = delete(a:file, 'rf')
+        else 
+            let success = delete(a:file)
+        endif
+        if success == -1 
+            echoerr '[dora] Error deleting ' . a:file
+        endif
+    endif
+endfunction
+
+function! dora#create_files(...)
+    let file = input("Name: ")
+    
+    if dora#is_directory(file)
+        call mkdir(file, 'p')
+    endif
+
+    silent execute ':!touch ' . file
+endfunction
+
+function! dora#rename_files(file)
+    let new_name = input('New file name: ', a:file, 'file')
+    if new_name != '' && new_name != a:file
+        silent execute ':!mv ' . a:file . ' ' . new_name 
+        silent execute ':silent !rm ' . a:file
+        redraw!
+    endif
 endfunction
 
 "If the file ends in '/' we make the assumption it's a directory
@@ -124,8 +137,6 @@ endfunction
 
 
 " TODO  
-" - Add abort to functions
-"
 " Bugs
 " - Once dora#open_under_cursor has been called, you can't close the buffer
 "   with -
@@ -133,6 +144,7 @@ endfunction
 " Things to do
 " - Add ../ entry to the explorer buffer
 " - Add the top level directory name so we know where we are
+" - Make more portable. It's tied to `fd`, `mv`, and `touch`
 "
 " Tests to write
 " - It opens up a new buffer for every new file specified
@@ -140,4 +152,4 @@ endfunction
 " - The previous dora buffer is cleared when we enter anew directory
 " - It opens a file if we press <cr> on it
 " - Dora buffers open to the far left
-" - Files do not have './' prefixed to them
+" - Files can be renamed

@@ -7,9 +7,12 @@ Note: Most of this doesn't work yet, this is a pipedream/WIP.
 
 - Open up the explorer with `-`
 - Open a file with `<cr>`
-- Filter selections with `f`. It uses `fd` underneath
+- Filter files with `f`. It uses `fd` underneath
+- Rename a file with `cc`
+- Delete a file with `dd`
+- Create files and directories with `i`
 - Test a file with `t`. This is currently extremely hardcoded and will not work
-  anyone else but me. Like I said, W.I.P.
+  for anyone else but me. Like I said, W.I.P.
 
 ## Why?
 
